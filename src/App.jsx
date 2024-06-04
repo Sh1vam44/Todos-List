@@ -8,7 +8,7 @@ export default function App() {
 
   function handleSubmit(e){
     e.preventDefault();
-    
+
     setTodo((currentTodos) => {
       return [
         ...currentTodos,
@@ -16,9 +16,25 @@ export default function App() {
         false },
       ]
     })
+
+    setnewItem("")
   }
 
-  console.log(todo)
+  function toggleTodo(id, completed){
+    setTodo(currentTodos =>{
+      return currentTodos.map(todo =>{
+        if(todo.id === id){
+          return {...todo, completed}
+        }
+        return todo
+      })
+    })
+  }
+  function deleteTodo(id){
+    setTodo(currentTodos => {
+      return currentTodos.filter(todo => todo.id !== id)
+    })
+  }
 
   return (
     <>
@@ -34,13 +50,15 @@ export default function App() {
       </form>
       <h1 className="header">Todo List</h1>
       <ul className="list">
+      {todo.length === 0 && "NO Todos"}  
       {todo.map((todo) =>{
-        return  <li>
+        return  < li key={todo.id}>
         <label>
-          <input type="checkbox" checked={todo.completed}/>
+          <input type="checkbox" checked={todo.completed}
+           onChange={e =>toggleTodo(todo.id, e.target.checked)}/>
            {todo.title}
         </label>
-        <button className="btn btn-danger">Delete</button>
+        <button onClick={() => deleteTodo(todo.id)} className="btn btn-danger">Delete</button>
         </li>
       })}  
     </ul>
